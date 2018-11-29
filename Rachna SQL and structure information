@@ -1,0 +1,181 @@
+_database_analyze half day (2016-01-27)
+_set up environment half day (2016-01-27)
+_page design 8 days (2016-01-28 to  2016-02-06)
+_implementation 2 week (2016-02-08 to 2016-02-22)
+
++user
+_user_id
+_user_name
+_role
+_register_date
+_update_date
+_del_flag
+
++student
+_student_name
+_student_id
+_class_id
+_dob
+_enroll_date
+_update_date
+_paid
+_expire_paymentdate
+_payment_date 
+_leave
+_leave_date
+_register_user
+_register_date
+_update_user
+_update_date
+_del_flag
+
++class
+_class_name
+_class_id
+_register_user
+_register_date
+_update_user
+_update_date
+_del_flag
+
++Search student 
+select from student-->condition ID/Name, student.del_flag = 0, student.leave_flag = 0
+SQL:
+	SELECT * FROM `t_students` WHERE student_id = 'param' OR student_name like '%param%' and del_flag = 0 and leave_flag = 0 
+
+-- *=============================* --
+
++Search Contact_Number of parent
+select from student-->student.contact_number, student.parent_name condition student ID/Name
+SQL:
+	SELECT 
+		STU.student_id as student_id,
+		STU.student_name AS student_name, 
+	    STU.address AS student_address, 
+	    EMC.parent_name AS emergency_name, 
+	    EMC.contact_number AS contact_number, 
+	    EMC.address AS address, 
+	    PRT.address AS parent_address,
+	    PRT.parent_name as parent_name,
+	    PRT.contact_number as parent_number
+	FROM 
+		t_students AS STU 
+	LEFT JOIN 
+		t_emergency AS EMC 
+	ON 
+		STU.student_id = EMC.student_id
+	LEFT JOIN
+		t_parents AS PRT
+	ON
+		STU.student_id = PRT.student_id
+	WHERE 
+		STU.student_id ='param' 
+	OR 
+		STU.student_name like '%param%' 
+	AND 
+		STU.leave_flag = 0
+	AND
+		STU.del_flag = 0
+	GROUP BY 
+		STU.student_id 
+
+-- *=============================* --	
+
++List student by class
+select from student-->condition student.del_flag = 0, student.leave_flag = 0
+SQL:
+	SELECT * FROM `t_students` WHERE class_id = 1 and del_flag = 0 and leave_flag = 0 
+
+-- *=============================* --	
+
++list student within a month
+select from student-->
+count new student condition (paid = null, expire_paymentdate - register_date = 1 month, leave = 0)
+count old student condition (expire_paymentdate - register_date > 1 month)
+count leave student condition (leave = 1)
+
+CURRENT_DATE can be replace with any given date 
+_new student in this month:
+SQL:
+	SELECT * FROM `t_students` WHERE enroll_date between DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE())-1 DAY) AND LAST_DAY(CURDATE())
+
+_old student until this month:
+SQL:
+	SELECT * FROM `t_students` WHERE enroll_date < DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE())-1 DAY)
+
+_leave student this month:
+SQL:
+	SELECT * FROM `t_students` WHERE leave_date between DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE())-1 DAY) AND LAST_DAY(CURDATE())
+
+_all student until this month:
+SQL:
+	SELECT * FROM `t_students` WHERE enroll_date < LAST_DAY(CURDATE()) AND del_flag = 0	 
+
+-- *=============================* --	
+
++list paid student
+select from student--> 
+SQL:
+	SELECT * FROM `t_students` WHERE expire_paymentdate > CURDATE() AND expire_paymentdate > paid_date AND paid = 1
+
+-- *=============================* --
+
++list student not yet paid
+select from student--> where condition.paid = 0, (OR) expire_paymentdate > payment_date, (AND) payment_date between start and end month
+
+use WEEKDAY: for start from Monday and DAYOFWEEK for start from Sunday
+start day of week adddate(curdate(), INTERVAL 1-DAYOFWEEK(curdate()) DAY) WeekStart,
+end day of week adddate(curdate(), INTERVAL 7-DAYOFWEEK(curdate()) DAY) WeekEnd	
+
+All
+SQL:
+	SELECT * FROM `t_students` WHERE expire_paymentdate < CURDATE() OR expire_paymentdate < payment_date OR paid = 0 
+
+_Week
+SQL:
+	SELECT * FROM `t_students` WHERE expire_paymentdate between adddate(curdate(), INTERVAL 1-DAYOFWEEK(curdate()) DAY) AND adddate(curdate(), INTERVAL 7-DAYOFWEEK(curdate()) DAY)
+
+-- *=============================* --
+ 
++list paid student within a month
+select from student-->where condition.paid = 1, (AND) expire_paymentdate > payment_date, (AND) payment_date between start and end month
+
+Month
+SQL:
+	SELECT * FROM `t_students` WHERE paid_date between DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE())-1 DAY) AND LAST_DAY(CURDATE()) AND expire_paymentdate > CURDATE()	
+
+_Week
+SQL:
+	SELECT * FROM `t_students` WHERE paid_date between adddate(curdate(), INTERVAL 1-DAYOFWEEK(curdate()) DAY) AND adddate(curdate(), INTERVAL 7-DAYOFWEEK(curdate()) DAY) AND expire_paymentdate > CURDATE()
+
+-- *=============================* --
+
++avergae of paid student
+count paid select from student-->where condition.paid = 1, (AND) expire_paymentdate > payment_date
+all student-->select count(*) from student condition del_flag = 0 AND leave_flag = 0
+unpaid = all - average
+average paid = count paid student * 100/all student
+average unpaid = 100 - average paid
+
+_Count All
+SQL:
+	SELECT COUNT(*) FROM `t_students` WHERE del_flag = 0 AND leave_flag = 0 
+
+_Count unpaid
+SQL:
+	SELECT COUNT(*) FROM `t_students` WHERE expire_paymentdate between adddate(curdate(), INTERVAL 1-DAYOFWEEK(curdate()) DAY) AND adddate(curdate(), INTERVAL 7-DAYOFWEEK(curdate()) DAY)
+
+_Count paid
+SQL:
+	SELECT COUNT(*) FROM `t_students` WHERE paid_date between adddate(curdate(), INTERVAL 1-DAYOFWEEK(curdate()) DAY) AND adddate(curdate(), INTERVAL 7-DAYOFWEEK(curdate()) DAY) AND expire_paymentdate > CURDATE()
+
+-- *=============================* --
+
++List Notification for upcoming paid student 
+select from student and parent-->student.student_name, parent.contact_number, parent.parent_name where current_date - expire_paymentdate <= 2
+
+--include count
+SQL:
+	SELECT * FROM `t_students` WHERE ABS(DATEDIFF(CURDATE(), expire_paymentdate)) <= 2 
+
+ 

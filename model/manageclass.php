@@ -63,61 +63,32 @@ function insertClass($class){
 }
 
 
-
-
-
 function getAllClasses(){
-
     $sql = "SELECT 
-
                 class_id,
-
                 class_name,
-
                 teacher_name,
-
                 teacher_id,
-
                 level_id,
-
                 start_time,
-
                 end_time,
-
                 time_shift,
-
                 register_user,
-
                 register_date,
-
                 update_user,
-
                 update_date
-
             FROM T_Classes
-
             WHERE del_flag = 0 ORDER BY class_name ASC ";
-
-
-
     $conn = getConnection();
-
     $stmt = $conn->prepare($sql);
-
     $stmt->execute();  
-
     $result = $stmt->fetchAll();
-
-
-
     return $result;
-
 }
 
 
 
 function getAllClassesUserRole($users){
-
     $sql = "SELECT 
                 class_id,
                 class_name,

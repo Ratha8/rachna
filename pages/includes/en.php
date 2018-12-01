@@ -13,6 +13,7 @@ $lang['PAYMENT_PIAD_UNPAID'] = 'Paid and Unpaid';
 $lang['PAYMENT_MANAGEMENT'] = 'Payment Management';
 $lang['SCHOOL_MANAGEMENT'] = 'School Management';
 $lang['STUDENT_MANAGEMENT'] = 'Student Management';
+$lang['TEACHER_MANAGEMENT'] = 'Teacher Management';
 $lang['USER_MANAGEMENT'] = 'User Management';
 $lang['SETTING_MANAGEMENT'] = 'Setting Management';
 $lang['EXAM_MANAGEMENT'] = 'Exam Management';
@@ -55,4 +56,7 @@ $lang['STUDENT_ATTENDANCE_ALL']='Attendance All';
 $lang['STUDENT_ATTENDANCE_CLASS']='Attendance By Class';
 $lang['INSERT_ATTENDANCE_RECORD']='Insert Attendance';
 $lang['VIEW_ATTENDANCE_RECORD']='View Attendance';
+$lang['ADD_TEACHER'] = 'Add new Teacher';
+$lang['TEACHER_LIST'] = 'List All Teachers';
+$lang['TEACHER_ATTENDANCE'] = 'Teachers Attendance';
 ?>

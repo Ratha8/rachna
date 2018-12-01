@@ -21,10 +21,12 @@
 
   $attendance = new Attendance;
   $user = getAllUsers();
-    $getStudentRecords = getAllStudentInClass(1);
-    if ($getStudentRecords === null) {
-        header("Location:404.php");
-      }
+  $getStudentRecords = getAllStudentInClass(1);
+  $opt_student ='';
+  $opt_class='';
+  if ($getStudentRecords === null) {
+    header("Location:404.php");
+  }
     
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -177,7 +179,7 @@
 <!-- bootstrap datetime picker -->
 <script src="../js/bootstrap-datetimepicker.min.js"></script>
 <script>
-$(document).ready(function(){  
+$(document).ready(function(){
       $('.form-information').on('change', '#class_id', function() {
         var id = $(this).val();
         $.ajax({
@@ -194,12 +196,14 @@ $(document).ready(function(){
           }
         });       
       });
+      $('#class_id').change();
     });
 var i=1;
     $("#add_row").click(function(){
       var cols = '';
       var opt_class = "<?php echo $opt_class; ?>";
-      var opt_student = "<?php echo $opt_student; ?>";
+      var opt_student ="<?php echo $opt_student; ?>";
+  
       cols += "<td>"+ (i+1) +"<input name='count' value='"+ (i+1) +"' type='hidden'></td>";
       cols += '<td class="form-information"><select name="class_id' + i + '" id="class_id_' + i + '" data-placeholder="Select Class" class="form-control chosen-select" tabindex="2">'+opt_class;
 
@@ -230,8 +234,8 @@ var i=1;
           }
         });       
       });
-
-      i++; 
+      $('#class_id_'+i).change();
+      i++;
   	});
      $("#delete_row").click(function(){
          if(i>1){

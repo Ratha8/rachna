@@ -641,6 +641,24 @@ include_once $lang_file;
                 <li class="treeview">
                     <a href="cert_class_list.php"><i class="fa fa-graduation-cap" aria-hidden="true"></i> <span><?php echo $lang['STUDENT_CERTIFICATE']; ?></span> <i class="fa fa-angle-left pull-right"></i></a>
                 </li>
+                <!-- Teacher Management Menu -->
+		            <li class="treeview">
+		            	<a href="#"><i class="fa fa-graduation-cap text-blue"></i> <span><?php echo $lang['TEACHER_MANAGEMENT']; ?></span> <i class="fa fa-angle-left pull-right"></i></a>
+		              	<ul class="treeview-menu">
+                    <li><a href="contact_student.php"><i class="fa fa-phone-square text-red"></i> <span><?php echo $lang['ADD_TEACHER']; ?></span></a></li>
+		                	<li><a href="register_student.php"><i class="fa fa-user-plus text-green"></i> <span><?php echo $lang['TEACHER_LIST']; ?></span></a></li>
+                      <li class="treeview">
+                          <a href="#" id="stu_list"><i class="fa fa fa-calendar"></i> <span><?php echo $lang['TEACHER_ATTENDANCE']; ?></span> <i class="fa fa-angle-left pull-right"></i></a>
+                          <ul class="treeview-menu">
+                            <li><a href="att_view_multiple.php"><i class="fa fa-list text-light-blue"></i> <span><?php echo $lang['TEACHER_ATTENDANCE_VIEW']; ?></span></a></li>
+                            <li><a href="att_register_multiple.php"><i class="fa fa-list text-aqua"></i> <span><?php echo $lang['TEACHER_ATTENDANCE_ALL']; ?></span></a></li>
+                            <li><a href="att_class_list.php"><i class="fa fa-list text-teal"></i> <span><?php echo $lang['STUDENT_ATTENDANCE_CLASS']; ?></span></a></li>
+                          </ul>
+                      </li>
+			                <li><a href="contact_student.php"><i class="fa fa-phone-square text-red"></i> <span><?php echo $lang['CONTACT']; ?></span></a></li>
+			                <li><a href="Student_class.php"><i class="fa fa-pencil-square-o text-light-blue"></i> <span><?php echo $lang['CHANGE_CLASS']; ?></span></a></li>
+		              	</ul>
+		            </li>
 		            <!-- User Management Menu -->
 		            <li class="treeview">
 		              <a href="#"><i class="fa fa-users text-red"></i> <span><?php echo $lang['USER_MANAGEMENT']; ?></span> <i class="fa fa-angle-left pull-right"></i></a>

@@ -1849,6 +1849,7 @@ function deleteStudent($user_id, $student_id){
 }   
 function updateLeaveFlag($user_id, $student_id, $leaveFlag,$date){
     $conn = getConnection();
+    $expireDate = date("Y-m-d", strtotime("+1 month", strtotime($date)));
     $sql =  "UPDATE 
                     T_Students 
             SET 
@@ -1856,6 +1857,10 @@ function updateLeaveFlag($user_id, $student_id, $leaveFlag,$date){
                 update_date = CURRENT_TIMESTAMP,
                 leave_flag = :leaveFlag ,
                 leave_date = :leavedate,
+                start_new = :start_new,
+                expire_new = :expire_new,
+                payment_date = :payment_date,
+                expire_paymentdate = :expire_paymentdate,
                 update_user = :user_id,
                 update_date = CURDATE()
             WHERE 
@@ -1865,6 +1870,10 @@ function updateLeaveFlag($user_id, $student_id, $leaveFlag,$date){
                 $stmt->bindParam(':user_id',$user_id);
                 $stmt->bindParam(':leaveFlag',$leaveFlag);
                 $stmt->bindParam(':leavedate',$date);
+                $stmt->bindParam(':start_new',$date);
+                $stmt->bindParam(':expire_new',$expireDate);
+                $stmt->bindParam(':payment_date',$date);
+                $stmt->bindParam(':expire_paymentdate',$expireDate);
                 $stmt->execute();
 }  
 
